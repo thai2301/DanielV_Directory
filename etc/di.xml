@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 DanielV. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+        <!--Plugin-->
+    <type name="Magento\Sales\Model\Order\Address">
+        <plugin name="danielv_directory" type="DanielV\Directory\Model\Plugin\Order\Address" sortOrder="10" />
+    </type>
+    <type name="Magento\Quote\Model\Quote\Address">
+        <plugin name="danielv_directory" type="DanielV\Directory\Model\Plugin\Quote\Address" sortOrder="10" />
+    </type>
+    <type name="Magento\Quote\Model\Quote\Address\CustomAttributeList">
+        <plugin name="danielv_directory" type="DanielV\Directory\Model\Plugin\Quote\Address\CustomAttributeList" sortOrder="10" />
+    </type>
+    <type name="Magento\Shipping\Model\Shipping">
+        <plugin name="danielv_directory" type="DanielV\Directory\Model\Plugin\Shipping" />
+    </type>
+    <type name="Magento\Customer\Model\Address">
+        <plugin name="update_address" type="DanielV\Directory\Model\Plugin\Customer\Model\Address" />
+    </type>
+    <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
+        <plugin name="directory_payment_information_management" type="DanielV\Directory\Plugin\PaymentInformationManagement" sortOrder="2" />
+    </type>
+    <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
+        <plugin name="directory_guest_payment_information_management" type="DanielV\Directory\Plugin\GuestPaymentInformationManagement" sortOrder="2" />
+    </type>
+    <type name="Magento\Checkout\Api\GuestShippingInformationManagementInterface">
+        <plugin name="directory_guest_shipping_information_management" type="DanielV\Directory\Plugin\GuestShippingInformationManagement" sortOrder="2" />
+    </type>
+    <type name="Magento\Checkout\Api\ShippingInformationManagementInterface">
+        <plugin name="directory_shipping_information_management" type="DanielV\Directory\Plugin\ShippingInformationManagement" sortOrder="2" />
+    </type>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="billing_address" xsi:type="object">BillingAddressAggregatorPlugin</item>
+                <item name="shipping_address" xsi:type="object">ShippingAddressAggregatorPlugin</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShipmentGridAggregator" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="billing_address" xsi:type="object">BillingAddressAggregatorPlugin</item>
+                <item name="shipping_address" xsi:type="object">ShippingAddressAggregatorPlugin</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CreditmemoGridAggregator" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="billing_address" xsi:type="object">BillingAddressAggregatorPlugin</item>
+                <item name="shipping_address" xsi:type="object">ShippingAddressAggregatorPlugin</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Invoice\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="billing_address" xsi:type="object">BillingAddressAggregatorPlugin</item>
+                <item name="shipping_address" xsi:type="object">ShippingAddressAggregatorPlugin</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BillingAddressAggregatorPlugin" type="Magento\Framework\DB\Sql\ConcatExpression">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="county" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">county</item>
+                </item>
+            </argument>
+            <argument name="separator" xsi:type="string">, </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShippingAddressAggregatorPlugin" type="Magento\Framework\DB\Sql\ConcatExpression">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="county" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">county</item>
+                </item>
+            </argument>
+            <argument name="separator" xsi:type="string">, </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement">
+        <plugin name="UpdateCounty"
+                type="DanielV\Directory\Plugin\UpdateCounty"/>
+    </type>
+</config>

@@ -1,0 +1,17 @@
+{
+    "customer_address_entity": {
+        "column": {
+            "county": true
+        }
+    },
+    "quote_address": {
+        "column": {
+            "county": true
+        }
+    },
+    "sales_order_address": {
+        "column": {
+            "county": true
+        }
+    }
+}
