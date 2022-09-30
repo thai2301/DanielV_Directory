@@ -47,7 +47,7 @@ class Shipping
                 }
 
                 if (in_array($attribute['attribute_code'], ['county'])) {
-                    $request->setData('dest_' . $attribute['attribute_code'], $attribute['value'][1]);
+                    $request->setData('dest_' . $attribute['attribute_code'], isset($attribute['value'][1])? $attribute['value'][1] : "");
                 }
             }
 

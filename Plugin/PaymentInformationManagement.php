@@ -1,8 +1,6 @@
 <?php
 
-
 namespace DanielV\Directory\Plugin;
-
 
 use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Quote\Api\Data\AddressInterface;
@@ -18,17 +16,16 @@ class PaymentInformationManagement
      */
     public function beforeSavePaymentInformationAndPlaceOrder(
         PaymentInformationManagementInterface $subject,
-        $cartId,
-        PaymentInterface $paymentMethod,
-        AddressInterface $billingAddress = null
+                                              $cartId,
+        PaymentInterface                      $paymentMethod,
+        AddressInterface                      $billingAddress = null
     ) {
-        if($billingAddress) {
-            $customAttr = ['county'];
-            foreach ($customAttr as $attr) {
-                if (isset($billingAddress->getCustomAttribute($attr)->getValue()['value'])){
-                    $billingAddress->setCustomAttribute($attr, $billingAddress->getCustomAttribute($attr)->getValue()['value']);
-                }
-            }
+        if ($billingAddress) {
+            $customAttr = 'county';
+            $county     = '';
+            if ($billingAddress->getCustomAttribute($customAttr))
+                $county = isset($billingAddress->getCustomAttribute($customAttr)->getValue()['value']) ? $billingAddress->getCustomAttribute($customAttr)->getValue()['value'] : '';
+            $billingAddress->setCustomAttribute($customAttr, $county);
         }
     }
 }

@@ -12,22 +12,23 @@
 
 namespace DanielV\Directory\Plugin;
 
-
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 
 class GuestShippingInformationManagement
 {
     public function beforeSaveAddressInformation(
         \Magento\Checkout\Api\GuestShippingInformationManagementInterface $subject,
-        $cartId,
-        ShippingInformationInterface $addressInformation
+                                                                          $cartId,
+        ShippingInformationInterface                                      $addressInformation
     ) {
-        $customAttr = 'county';
+        $customAttr      = 'county';
         $addressShipping = $addressInformation->getShippingAddress();
-            if(isset($addressShipping->getCustomAttribute($customAttr)->getValue()['value'])) {
-                $addressShipping->setCounty($addressShipping->getCustomAttribute($customAttr)->getValue()['value']);
-                $addressShipping->setCustomAttribute($customAttr, $addressShipping->getCustomAttribute($customAttr)->getValue()['value']);
-            }
+        $county          = '';
+        if ($addressShipping->getCustomAttribute($customAttr))
+            $county = isset($addressShipping->getCustomAttribute($customAttr)->getValue()['value']) ? $addressShipping->getCustomAttribute($customAttr)->getValue()['value'] : '';
+        $addressShipping->setCounty($county);
+        $addressShipping->setCustomAttribute($customAttr, $county);
+
         return [$cartId, $addressInformation];
     }
 }
